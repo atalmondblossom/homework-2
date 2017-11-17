@@ -1,9 +1,3 @@
-#include <unistd.h>
-#include <sys/wait.h>
-#include <sys/socket.h>
-#include <sys/un.h>
-#include <sys/types.h>
-#include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -59,25 +53,24 @@ int evaluate_command(int n_commands, struct single_command (*commands)[512])
       fprintf(stderr, "%s: command not found\n", com->argv[0]);
       return -1;
     }
- }
+  }
 
   return 0;
 }
 
-
 void free_commands(int n_commands, struct single_command (*commands)[512])
 {
-        for (int i = 0; i < n_commands; ++i) {
-                struct single_command *com = (*commands) + i;
-                int argc = com->argc;
-                char** argv = com->argv;
+  for (int i = 0; i < n_commands; ++i) {
+    struct single_command *com = (*commands) + i;
+    int argc = com->argc;
+    char** argv = com->argv;
 
-                for (int j = 0; j < argc; ++j) {
-                        free(argv[j]);
-                }
+    for (int j = 0; j < argc; ++j) {
+      free(argv[j]);
+    }
 
-                free(argv);
-        }
+    free(argv);
+  }
 
-        memset((*commands), 0, sizeof(struct single_command) * n_commands);
+  memset((*commands), 0, sizeof(struct single_command) * n_commands);
 }
